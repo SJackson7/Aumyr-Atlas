@@ -1,0 +1,235 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#081523">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Aumyr Atlas">
+  <meta name="description" content="A small GPS-linked Aumyr clock, calendar, map and imaginary local weather companion.">
+  <link rel="manifest" href="./manifest.webmanifest">
+  <link rel="icon" type="image/svg+xml" href="./icon.svg">
+  <link rel="apple-touch-icon" sizes="180x180" href="./apple-touch-icon.png">
+  <title>Aumyr Pocket Atlas · Alternate Grace</title>
+  <style>
+    :root { color-scheme: dark; --ink:#e9e4d6;--muted:#aeb9bd;--dim:#7f929e;--gold:#e8c98d;--gold2:#b9985f;--line:rgba(226,202,153,.20);--panel:rgba(17,38,54,.92);--deep:#081523;--soft:#112839;--teal:#84cfc7;--danger:#f4b3aa }
+    *{box-sizing:border-box}html{background:var(--deep);scroll-behavior:smooth}body{margin:0;min-height:100dvh;font:14px/1.47 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:var(--ink);background:radial-gradient(ellipse 500px 370px at 85% 0,rgba(34,83,112,.36),transparent 75%),radial-gradient(ellipse 600px 800px at 0 80%,rgba(43,85,88,.14),transparent 70%),#081523;}
+    button,input,select{font:inherit}button{cursor:pointer}button:focus-visible,input:focus-visible{outline:2px solid var(--teal);outline-offset:3px}button:disabled{opacity:.5;cursor:default}a{color:#ebd5a1}
+    .shell{max-width:540px;padding:calc(16px + env(safe-area-inset-top)) 16px calc(30px + env(safe-area-inset-bottom));margin:0 auto;}
+    .top{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-bottom:15px;border-bottom:1px solid var(--line)}
+    .brand{display:flex;gap:11px;align-items:center;min-width:0}.brand-sigil{position:relative;flex:none;display:grid;place-items:center;width:41px;height:41px;border:1px solid rgba(232,201,141,.55);border-radius:11px;background:linear-gradient(145deg,#2e4b59,#0b2131);box-shadow:0 0 0 4px rgba(196,163,101,.05);font:26px/1 Georgia,serif;color:var(--gold)}.brand-sigil:after{content:"";width:23px;height:23px;position:absolute;border:1px solid rgba(231,205,155,.18);transform:rotate(45deg)}
+    .eyebrow{font-size:9px;color:var(--gold);letter-spacing:.22em;text-transform:uppercase;font-weight:700}.brand h1{font:small-caps 21px/1.12 Georgia,"Times New Roman",serif;letter-spacing:.035em;margin:4px 0 0}.brand .subtitle{margin:2px 0 0;font-size:10px;color:#99aab5;letter-spacing:.055em}.live{display:flex;align-items:center;gap:6px;flex:none;font-size:10px;letter-spacing:.12em;color:#c7e6df}.live i{width:7px;height:7px;border-radius:50%;background:#8de6bd;box-shadow:0 0 12px #8de6bd}
+    .splash-title{font:10px/1.4 -apple-system,BlinkMacSystemFont,sans-serif;letter-spacing:.2em;color:var(--gold);text-transform:uppercase;display:flex;align-items:center;gap:9px;margin:25px 2px 8px}.splash-title:after{content:"";height:1px;flex:1;background:linear-gradient(90deg,rgba(221,193,135,.4),transparent)}
+    .hero{overflow:hidden;position:relative;background:linear-gradient(154deg,rgba(36,68,84,.98),rgba(10,30,46,.96) 66%,rgba(20,42,57,.99));border:1px solid rgba(225,197,142,.34);border-radius:16px;padding:21px 20px 17px;box-shadow:0 14px 32px rgba(0,0,0,.24)}
+    .hero:before{content:"";position:absolute;inset:-70px -10px auto auto;width:230px;height:230px;border-radius:50%;border:1px solid rgba(225,198,141,.1);box-shadow:0 0 0 27px rgba(225,198,141,.02),0 0 0 65px rgba(225,198,141,.018);pointer-events:none}.hero:after{content:"✧   ·    ✦     ·  ✧";color:#edcd906b;position:absolute;right:16px;top:17px;font-size:14px;letter-spacing:15px;white-space:nowrap;pointer-events:none}
+    .hero-top{display:flex;align-items:center;justify-content:space-between;gap:9px;font-size:10px;letter-spacing:.12em;color:#d5c49d;text-transform:uppercase}.hero-top strong{font-weight:500;color:var(--teal)}
+    .time-line{display:flex;align-items:baseline;gap:10px;margin:17px 0 0}.clock{font:clamp(53px,14.5vw,76px)/1 Georgia,"Times New Roman",serif;font-variant-numeric:tabular-nums;letter-spacing:-.055em;color:#fff3d7;text-shadow:0 1px 20px rgba(238,197,127,.17)}.clock-s{color:#b7c8ca;font:17px/1.3 Georgia,serif;font-variant-numeric:tabular-nums}.date{font:clamp(18px,5vw,24px)/1.22 Georgia,serif;margin:12px 0 5px;color:#efdcba}.calendar-sub{font-size:11px;color:#b9c5c6;line-height:1.6}.calendar-sub b{color:#ded2bd;font-weight:500}
+    .hero-foot{display:flex;gap:7px;flex-wrap:wrap;align-items:center;margin-top:19px;padding-top:12px;border-top:1px solid rgba(239,208,155,.16);color:#aec2c3;font-size:11px}.hero-foot .moon{font-size:21px;color:var(--gold)}.hero-foot .earth-now{margin-left:auto;color:#8ea7ad;font-variant-numeric:tabular-nums;font-size:10px}
+    .weather{position:relative;background:radial-gradient(ellipse at 87% 0%,rgba(62,119,138,.26),transparent 60%),linear-gradient(135deg,#18364a,#112535 58%,#112936);border:1px solid var(--line);border-radius:15px;padding:18px 17px;margin-top:13px;overflow:hidden}
+    .section-top{display:flex;justify-content:space-between;align-items:center;gap:10px;color:#ebdcbb;font-size:10px;font-weight:700;letter-spacing:.16em;text-transform:uppercase}.section-top small{font-size:10px;font-weight:500;letter-spacing:0;color:#93acb2;text-transform:none}
+    .sky-now{display:flex;align-items:center;gap:13px;padding:11px 0 13px}.weather-symbol{display:grid;place-items:center;flex:none;width:74px;height:74px;color:#f1dba8;filter:drop-shadow(0 5px 16px rgba(246,203,135,.17))}.weather-symbol svg{width:72px;height:72px}.sky-main{min-width:0;flex:1}.sky-main strong{display:block;font:19px/1.2 Georgia,serif;color:#f6e5c7}.sky-main small{color:#acbfbd;font-size:11px;display:block;margin-top:5px}.temperature{font:36px/1 Georgia,serif;color:#f6e7cb;white-space:nowrap}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.stat{border:1px solid rgba(220,195,151,.12);background:rgba(4,18,30,.29);border-radius:8px;padding:8px 9px}.stat b{display:block;font-size:14px;font-variant-numeric:tabular-nums;font-weight:500;color:#e6f2ef}.stat small{color:#98aeb8;font-size:9px;text-transform:uppercase;letter-spacing:.09em}
+    .forecast-title{display:flex;justify-content:space-between;align-items:center;color:#dbcba8;font-size:11px;margin-top:19px}.forecast-title small{color:#8fa4ad}.forecast{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(68px,1fr);gap:6px;overflow-x:auto;margin-top:8px;padding-bottom:2px;scrollbar-width:thin;scrollbar-color:#607580 transparent}.forecast-slot{min-width:65px;background:#132e3e;border:1px solid #294452;border-radius:9px;padding:9px 5px 8px;text-align:center}.forecast-slot .slot-time{color:#a2b7bf;font-size:10px;font-variant-numeric:tabular-nums}.forecast-slot .slot-icon{height:31px;display:grid;place-items:center;color:var(--gold)}.forecast-slot .slot-icon svg{width:26px;height:26px}.forecast-slot .slot-temp{font:15px Georgia,serif;color:#f2e5cd}.forecast-slot .slot-rain{font-size:9px;color:#8fcfcf;margin-top:2px}
+    .map-card{background:#0e2535;border:1px solid var(--line);border-radius:16px;overflow:hidden}.map-head{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:13px 14px 12px}.map-head h2{font:17px Georgia,serif;margin:0;color:#e7d6b0}.map-head small{display:block;font-size:10px;color:#95abb0;margin-top:2px}.ghost-link{font-size:11px;text-decoration:none;border:1px solid rgba(224,194,131,.35);border-radius:7px;padding:7px 9px;white-space:nowrap;color:#e5c990}
+    .map-wrap{position:relative;aspect-ratio:1.5;overflow:hidden;background:radial-gradient(ellipse at 68% 23%,#375664,transparent 32%),linear-gradient(141deg,#284a53 0%,#1a3f4c 45%,#112e40 65%,#183643 100%);cursor:crosshair;touch-action:manipulation;outline-offset:-4px}
+    .map-wrap:after{content:"";position:absolute;inset:0;pointer-events:none;z-index:2;background:linear-gradient(0deg,rgba(3,15,27,.29),transparent 22%,transparent 70%,rgba(3,15,27,.14))}.map-wrap:focus-visible{outline:3px solid var(--teal)}
+    .map-art{display:block;position:absolute;inset:0;width:100%;height:100%;object-fit:fill;filter:saturate(.78) contrast(1.04) brightness(.89);opacity:0;transition:opacity .4s}.map-art.loaded{opacity:1}
+    .map-grid{position:absolute;inset:0;pointer-events:none;background:repeating-linear-gradient(to right,transparent 0,transparent calc(16.666% - 1px),rgba(220,235,226,.18) calc(16.666% - 1px),rgba(220,235,226,.18) 16.666%),repeating-linear-gradient(to bottom,transparent 0,transparent calc(20% - 1px),rgba(220,235,226,.16) calc(20% - 1px),rgba(220,235,226,.16) 20%);z-index:1}
+    .map-grid span{position:absolute;right:8px;bottom:7px;font:9px Georgia,serif;color:#f5e4bcaa;letter-spacing:.05em}.map-stamp{position:absolute;top:8px;left:8px;z-index:3;font-size:9px;letter-spacing:.1em;text-transform:uppercase;padding:5px 7px;border:1px solid #d0b47c7d;color:#e7d5ad;background:#081a27ce;border-radius:5px}
+    .map-fallback{position:absolute;inset:0;display:grid;place-content:center;text-align:center;padding:30px 38px;color:#afc3c0;pointer-events:none}.map-fallback .compass{font:64px Georgia,serif;color:#c6ab76a0;line-height:1}.map-fallback strong{font:15px Georgia,serif;color:#e9d9b8;margin:9px 0 5px}.map-fallback small{font-size:11px;line-height:1.4}.map-fallback[hidden]{display:none}
+    .pin{position:absolute;left:50%;top:50%;z-index:4;transform:translate(-50%,-88%);display:grid;place-items:center;color:#fff5df;filter:drop-shadow(0 6px 3px #08151ad9);pointer-events:none}.pin svg{width:34px;height:44px;overflow:visible}.pin:before{content:"";display:block;position:absolute;top:71%;width:21px;height:10px;border:2px solid #fee5a8a6;background:#e1aa4733;border-radius:50%;animation:ping 2.8s ease-out infinite;z-index:-1}@keyframes ping{0%{transform:scale(.5);opacity:.8}80%,100%{transform:scale(2.7);opacity:0}}@media (prefers-reduced-motion:reduce){.pin:before{animation:none}}
+    .map-bottom{padding:11px 14px 13px;display:flex;gap:8px;justify-content:space-between;align-items:center;flex-wrap:wrap;border-top:1px solid rgba(226,201,146,.15)}.map-bottom .fix{color:#d7e5e1;font-variant-numeric:tabular-nums;font-size:12px}.map-bottom .fix small{display:block;color:#819ca7;font-size:9px;letter-spacing:.09em;text-transform:uppercase}.map-bottom .place-method{font-size:10px;color:#bda878;max-width:140px;text-align:right}
+    .loc-actions{display:flex;gap:9px;margin-top:12px}.cta{flex:1;min-height:46px;padding:11px 12px;background:linear-gradient(120deg,#e5cc95,#bda16b);color:#112331;border:1px solid #f0d6a1;border-radius:9px;font-size:12px;letter-spacing:.025em;font-weight:700;box-shadow:0 4px 15px #0002}.secondary{flex:0 0 auto;min-height:46px;padding:11px 14px;background:#1b3749;border:1px solid #476477;border-radius:9px;color:#deede8;font-size:12px}.loc-status{min-height:23px;color:#91b2b8;font-size:11px;margin:9px 3px 0}.loc-status.error{color:var(--danger)}
+    details.settings{border:1px solid var(--line);border-radius:13px;background:#102637;margin-top:14px;overflow:hidden}details.settings summary{cursor:pointer;list-style:none;padding:15px;display:flex;align-items:center;justify-content:space-between;color:#e5d0a5;font:15px Georgia,serif}details.settings summary::-webkit-details-marker{display:none}details.settings summary:after{content:"＋";font:18px system-ui;color:#b5c4c1}details.settings[open] summary:after{content:"−"}.settings-body{padding:1px 15px 16px;border-top:1px solid var(--line)}.hint{font-size:11px;line-height:1.5;color:#96afb5;margin:12px 0}.field-line{display:flex;align-items:center;justify-content:space-between;gap:9px;font-size:12px;color:#d0dce0;margin-top:15px}.field-line strong{font-variant-numeric:tabular-nums;color:#f4dda9;font-size:12px;font-weight:500}.settings input[type=range]{width:100%;accent-color:#e8c98d;height:26px;margin:2px 0 4px}.grid2{display:grid;grid-template-columns:1fr 1fr;gap:11px}.settings label{display:block;font-size:11px;color:#b8cbcc}.settings input[type=number]{border:1px solid #557080;background:#081e2b;color:#f4e2bc;border-radius:6px;padding:12px 9px;min-width:0;width:100%;font-size:16px;margin-top:5px}.settings .smallbtn{margin-top:11px;width:100%;min-height:43px;border-radius:7px;border:1px solid #587185;background:#1c394c;color:#e2d8bd}.divider{height:1px;background:var(--line);margin:18px 0 2px}.switch-line{display:flex;align-items:center;justify-content:space-between;gap:6px;font-size:12px;color:#e4ded1;margin-top:14px}.switch-line select{border-radius:7px;border:1px solid #557080;background:#081e2b;color:#eee3cb;padding:9px 10px;min-height:41px}
+    .notes{font-size:11px;line-height:1.65;color:#839ea8;margin:18px 5px 0}.notes strong{color:#c5cecb;font-weight:500}.footer{border-top:1px solid var(--line);padding-top:15px;margin-top:24px;font-size:10px;color:#869ca6;display:flex;justify-content:space-between;gap:15px}.footer a{white-space:nowrap;text-decoration:none;color:#cfb77e}
+    @media(max-width:360px){.shell{padding-left:11px;padding-right:11px}.brand h1{font-size:19px}.hero{padding:19px 15px}.weather{padding:17px 13px}.sky-now{gap:8px}.weather-symbol{width:61px}.temperature{font-size:30px}.forecast{grid-auto-columns:65px}}
+    @media(min-width:700px){.shell{padding-top:30px;padding-bottom:40px}.hero,.weather,.map-card{box-shadow:0 18px 50px rgba(0,0,0,.17)}}
+  </style>
+</head>
+<body>
+<div class="shell">
+  <header class="top"><div class="brand"><div class="brand-sigil" aria-hidden="true">✦</div><div><div class="eyebrow">Alternate Grace · Explorer's edition</div><h1>Aumyr Pocket Atlas</h1><div class="subtitle">A window between two worlds</div></div></div><div class="live"><i></i><span>LIVE</span></div></header>
+  <div class="splash-title">The living calendar</div>
+  <section class="hero" aria-label="Live Aumyr date and time">
+    <div class="hero-top"><span>Aumyr Meridian Time</span><strong id="zoneLabel">AMT±0</strong></div>
+    <div class="time-line"><div class="clock" id="clock" role="timer" aria-live="off">--:--</div><div class="clock-s" id="seconds">:--</div></div>
+    <div class="date" id="date">Loading the Aumyr calendar…</div><div class="calendar-sub" id="calendarSub">Twelve moons · 28 days each</div>
+    <div class="hero-foot"><span class="moon" id="moonGlyph" aria-hidden="true">◯</span><span id="moonText">Moon phase</span><span class="earth-now" id="earthTime"></span></div>
+  </section>
+  <div class="splash-title">Sky above your projected location</div>
+  <section class="weather" aria-label="Simulated Aumyr weather">
+    <div class="section-top"><span>Aumyr weather</span><small>Simulated · local conditions</small></div>
+    <div class="sky-now"><div class="weather-symbol" id="bigWeather" aria-hidden="true"></div><div class="sky-main"><strong id="condition">Reading the skies…</strong><small id="weatherContext">Weather follows your Aumyr coordinates</small></div><div class="temperature" id="temp">--°</div></div>
+    <div class="stats"><div class="stat"><b id="wind">--</b><small>Wind · km/h</small></div><div class="stat"><b id="rain">--</b><small>Rain chance</small></div><div class="stat"><b id="humidity">--</b><small>Humidity</small></div></div>
+    <div class="forecast-title"><span>Next six forecast intervals</span><small>Every two hours</small></div><div class="forecast" id="forecast" aria-label="Six two-hour forecasts"></div>
+  </section>
+  <div class="splash-title">Your place in Aumyr</div>
+  <section class="map-card" aria-label="Aumyr location map">
+    <div class="map-head"><div><h2>World chart</h2><small>Tap the chart to move your marker</small></div><a class="ghost-link" href="https://kessen-gm-mobile-proof.drgn7.chatgpt.site/" target="_blank" rel="noopener noreferrer">GM world map ↗</a></div>
+    <div class="map-wrap" id="mapWrap" role="button" tabindex="0" aria-label="Choose Aumyr location on the world chart">
+      <div class="map-fallback" id="mapFallback"><div class="compass">✧</div><strong>Aumyr cartographic grid</strong><small>The original HD-2D artwork is included in this app.</small></div>
+      <img class="map-art" id="mapArt" alt="Aumyr HD-2D world overview" src="./aumyr-hd2d-overview.webp" draggable="false" referrerpolicy="no-referrer">
+      <div class="map-grid"><span>45° W · Prime Meridian · 45° E</span></div><div class="map-stamp">Explorer's projection</div>
+      <div class="pin" id="mapPin" aria-hidden="true"><svg viewBox="0 0 40 54" fill="none"><path d="M20 49C14.8 40 4 30 4 19.5C4 9.84 11.16 3 20 3s16 6.84 16 16.5C36 30 25.2 40 20 49Z" fill="#D6AC65" stroke="#FFF4C9" stroke-width="2"/><circle cx="20" cy="19" r="7.3" fill="#102C3A" stroke="#F4EACF" stroke-width="1.8"/><path d="M20 9v20M10 19h20" stroke="#DAAF66" stroke-width="1" opacity=".7"/></svg></div>
+    </div>
+    <div class="map-bottom"><div class="fix"><small>Aumyr position</small><span id="aumyrPosition">--° N, --° E</span></div><div class="place-method" id="placeMethod">Manual Aumyr fix</div></div>
+  </section>
+  <div class="loc-actions"><button class="cta" id="findMe" type="button">◎ Find my Earth location</button><button class="secondary" id="resetPosition" type="button" title="Center on the Aumyr prime meridian">Reset</button></div>
+  <div id="locationStatus" class="loc-status" role="status">GPS is optional. Coordinates never leave your device.</div>
+  <details class="settings" id="coordinateControls"><summary>Adjust latitude &amp; longitude</summary><div class="settings-body">
+    <p class="hint">GPS projects Earth's entire longitude and latitude ranges onto Aumyr's mapped 45°W–45°E and 20°N–65°N chart. For fun, you can move independently by tapping the map or adjusting the sliders.</p>
+    <div class="field-line"><label for="aumyrLat">Aumyr latitude</label><strong id="latText">42.5° N</strong></div><input type="range" id="aumyrLat" min="20" max="65" step="0.1" value="42.5">
+    <div class="field-line"><label for="aumyrLon">Aumyr longitude</label><strong id="lonText">0.0° E</strong></div><input type="range" id="aumyrLon" min="-45" max="45" step="0.1" value="0">
+    <button class="smallbtn" id="returnGps" type="button" disabled>Return to my GPS projection</button>
+    <div class="divider"></div><p class="hint">Or enter Earth coordinates manually if Safari does not allow GPS. This does not change your phone's real location.</p>
+    <div class="grid2"><label for="earthLat">Earth latitude <input id="earthLat" type="number" inputmode="decimal" min="-90" max="90" step="any" placeholder="−90 to +90"></label><label for="earthLon">Earth longitude <input id="earthLon" type="number" inputmode="decimal" min="-180" max="180" step="any" placeholder="−180 to +180"></label></div>
+    <button class="smallbtn" id="useManualEarth" type="button">Project these Earth coordinates</button>
+    <div class="switch-line"><label for="units">Temperature</label><select id="units"><option value="f">Fahrenheit (°F)</option><option value="c">Celsius (°C)</option></select></div>
+  </div></details>
+  <div class="notes"><strong>Explorer's note.</strong> Aumyr time follows the approved 336-day calendar. For this playful live display, the prime meridian is synchronized to UTC. Local time changes by Aumyr longitude. Weather is a deterministic pocket simulation based on the projected coordinates and Aumyr season, not an official reading from the GM map's full weather engine. The original HD-2D overview artwork is bundled for offline viewing.</div>
+  <footer class="footer"><span>ALTERNATE GRACE · AUMYR</span><a href="https://kessen-gm-mobile-proof.drgn7.chatgpt.site/" target="_blank" rel="noopener noreferrer">Enter the full atlas ↗</a></footer>
+</div>
+<script>
+(function(){ 'use strict';
+  const MS_DAY=86400000, MS_HOUR=3600000;
+  // Canonical 336-day year; Gregorian 0001-01-07 00:00 = Leth 1 Netah 1 CE at AMT prime meridian.
+  const epoch=new Date(0); epoch.setUTCHours(0,0,0,0); epoch.setUTCFullYear(1,0,7); const epochMs=epoch.getTime();
+  const moons=['Netah','Idan','Adamar','Lahav','Ziv','Raam','Ruah','Kavah','Ozar','Mayim','Erev','Kefor'];
+  const days=['Leth','Aer','Dren','Oth','Avet','Kem','Shalem'];
+  const weeks=['Moed','Raqia','Orah','Tzel'];
+  const glyphs=['●','◔','◐','◕','○','◕','◑','◖'];
+  const $=id=>document.getElementById(id);
+  const clamp=(x,a,b)=>Math.min(b,Math.max(a,x)); const mod=(a,m)=>((a%m)+m)%m;
+  const state={lat:42.5,lon:0,fix:'manual',earth:null,projected:null,units:'f'};
+  const map=$('mapWrap');
+  const clockCache={key:''};
+  function prettyLat(v){return Math.abs(v).toFixed(1)+'° '+(v<0?'S':'N')}
+  function prettyLon(v){return Math.abs(v).toFixed(1)+'° '+(v<0?'W':'E')}
+  function zoneOf(lon){return clamp(Math.round(lon/15),-3,3)}
+  function formatZone(zone){return 'AMT'+(zone>0?'+'+zone:zone<0?String(zone):'±0')}
+  function aumyrAt(utcMs,lon){
+    const zone=zoneOf(lon), adjusted=utcMs+zone*MS_HOUR, absolute=Math.floor((adjusted-epochMs)/MS_DAY);
+    const dayOfYear=mod(absolute,336), year=Math.floor(absolute/336)+1;
+    const msOfDay=mod(adjusted-epochMs,MS_DAY);
+    const hour=Math.floor(msOfDay/MS_HOUR), minute=Math.floor((msOfDay%MS_HOUR)/60000), second=Math.floor((msOfDay%60000)/1000);
+    const dayOfMoon=dayOfYear%28+1, moonIndex=Math.floor(dayOfYear/28);
+    return {zone,absolute,dayOfYear,year,hour,minute,second,dayOfMoon,moonIndex,moon:moons[moonIndex],weekday:days[mod(absolute,7)],week:weeks[Math.floor((dayOfMoon-1)/7)],season:Math.floor(dayOfYear/84)};
+  }
+  function hash(n){const x=Math.sin(n*12.9898+78.233)*43758.5453;return x-Math.floor(x)}
+  function smooth(t){return t*t*(3-2*t)}
+  function noise(t,seed){const k=Math.floor(t),a=hash(k+seed),b=hash(k+1+seed);return a+(b-a)*smooth(t-k)}
+  function skyFor(absDay,hour,lat,lon){
+    // Independent, seeded, softly varying pocket simulation. Not the full GM weather engine.
+    const dayOfYear=mod(absDay,336), seasonal=2*Math.PI*dayOfYear/336, highLat=(lat-20)/45;
+    const key=Math.round(lat*10)*877+Math.round(lon*10)*1337;
+    const t=absDay*24+hour;
+    const front=noise(t/10,key+33),storm=noise(t/17,key+97),breeze=noise(t/7,key+211);
+    const base=31-27*highLat;
+    const tempC=base+(7+highLat*9)*Math.sin(seasonal-0.5)+3.9*Math.cos(2*Math.PI*(hour-15)/24)+(front-.5)*8;
+    const cloud=clamp(.25+front*.58+storm*.22,0,1);
+    const rain=clamp(Math.round((cloud-.4)*155+storm*25),0,97);
+    const wind=Math.round(4+breeze*22+(storm>.77?8:0));
+    const humidity=clamp(Math.round(42+cloud*46+storm*12),20,99);
+    const sunrise=7+highLat*.85-1.25*Math.sin(seasonal-.5);
+    const sunset=19-highLat*.85+1.25*Math.sin(seasonal-.5);
+    const daylight=hour>=sunrise&&hour<sunset;
+    let code='clear',condition='Clear skies';
+    if(cloud>.89&&storm>.73&&tempC>1.5){code='storm';condition='Thunderstorm'}
+    else if(cloud>.81&&rain>56){code=tempC<1.5?'snow':'rain';condition=tempC<1.5?'Falling snow':'Rain showers'}
+    else if(cloud>.69){code='cloud';condition='Clouded skies'}
+    else if(cloud>.52&&storm<.45){code='mist';condition='Pale mist'}
+    else if(cloud>.52){code='partly';condition='Passing clouds'}
+    if(!daylight&&code==='clear'){code='night';condition='Clear night'}
+    if(!daylight&&code==='partly'){code='nightcloud';condition='Clouds by moonlight'}
+    return {code,condition,tempC,wind,humidity,rain,daylight};
+  }
+  const iconParts={sun:'<circle cx="36" cy="33" r="13" fill="#F5D291" stroke="#FFE6B1" stroke-width="2"/><g stroke="#F4CC86" stroke-width="3" stroke-linecap="round"><path d="M36 7v9M36 50v9M10 33h9M53 33h9M17.6 14.6l6.4 6.4M48 45l6.4 6.4M17.6 51.4l6.4-6.4M48 21l6.4-6.4"/></g>',cloud:'<path d="M16 50h40c9 0 12-6 12-12 0-6-5-11-12-11-2 0-4 0-5 1C48 17 39 12 31 16c-7 3-10 9-9 16-8-1-16 3-16 10 0 5 4 8 10 8Z" fill="#b3ced0" stroke="#ecf2e9" stroke-width="2"/>',moon:'<path d="M48 8C27 11 19 31 30 46c6 9 18 12 28 7-14 12-37 8-43-9C6 25 20 7 40 7c3 0 6 0 8 1Z" fill="#f5d9a4" stroke="#fff0c5" stroke-width="1.5"/><circle cx="53" cy="17" r="2" fill="#f2e8c8"/><path d="M59 8v10M54 13h10" stroke="#f5d49b"/>',drops:'<g stroke="#8edbe6" stroke-width="3" stroke-linecap="round"><path d="M19 54l-4 9M38 54l-4 9M56 54l-4 9"/></g>',snow:'<g stroke="#cfebef" stroke-width="2" stroke-linecap="round"><path d="M20 54v11M14 60h12M40 54v11M34 60h12M59 54v11M53 60h12"/></g>',bolt:'<path d="M42 49l-12 14 3-12h-8l13-17-3 14Z" fill="#f3d08b" stroke="#fff0b3" stroke-width="1.5"/>',mist:'<g stroke="#b4d9d6" stroke-width="2.5" stroke-linecap="round"><path d="M12 50h44M19 58h38M9 66h30"/></g>'};
+  function weatherIcon(code){let content;
+    if(code==='clear')content=iconParts.sun;
+    else if(code==='night')content=iconParts.moon;
+    else if(code==='cloud')content=iconParts.cloud;
+    else if(code==='rain')content=iconParts.cloud+iconParts.drops;
+    else if(code==='snow')content=iconParts.cloud+iconParts.snow;
+    else if(code==='storm')content=iconParts.cloud+iconParts.bolt;
+    else if(code==='mist')content=iconParts.sun+iconParts.mist;
+    else if(code==='nightcloud')content=iconParts.moon+iconParts.cloud;
+    else content=iconParts.sun+iconParts.cloud;
+    return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 76 76" fill="none" aria-hidden="true">'+content+'</svg>';
+  }
+  function temperature(c){return Math.round(state.units==='f'?c*9/5+32:c)+'°'}
+  function render(){
+    const now=Date.now(),c=aumyrAt(now,state.lon),h=String(c.hour).padStart(2,'0'),m=String(c.minute).padStart(2,'0');
+    $('clock').textContent=h+':'+m;$('seconds').textContent=':'+String(c.second).padStart(2,'0');
+    $('zoneLabel').textContent=formatZone(c.zone);
+    $('date').textContent=`${c.weekday} · ${c.dayOfMoon} ${c.moon} · ${c.year} CE`;
+    $('calendarSub').innerHTML=`<b>${c.week}</b> week · Day ${c.dayOfYear+1} of 336 · Season ${c.season+1} of 4`;
+    const phase=Math.floor((c.dayOfMoon-1)/3.5)%8,phases=['New Moon','Waxing crescent','First quarter','Waxing gibbous','Full Moon','Waning gibbous','Last quarter','Waning crescent'];
+    $('moonGlyph').textContent=glyphs[phase];$('moonText').textContent=phases[phase];
+    $('earthTime').textContent='EARTH '+new Date(now).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
+    const hourFraction=c.hour+c.minute/60,weather=skyFor(c.absolute,hourFraction,state.lat,state.lon);
+    $('bigWeather').innerHTML=weatherIcon(weather.code);$('condition').textContent=weather.condition;
+    $('weatherContext').textContent=`${prettyLat(state.lat)} · ${prettyLon(state.lon)} · ${formatZone(c.zone)}`;
+    $('temp').textContent=temperature(weather.tempC);$('wind').textContent=String(weather.wind);$('rain').textContent=weather.rain+'%';$('humidity').textContent=weather.humidity+'%';
+    const forecastKey=[c.absolute,Math.floor(c.hour/2),state.lat,state.lon,state.units].join('|');
+    if(forecastKey!==clockCache.key){clockCache.key=forecastKey;let html='';
+      // Intervals always begin at even local Aumyr clock hours, rolling at 24:00.
+      for(let i=1;i<=6;i++){
+        const raw=(Math.floor(c.hour/2)+i)*2,dayOffset=Math.floor(raw/24),fh=raw%24;
+        const f=skyFor(c.absolute+dayOffset,fh,state.lat,state.lon);
+        const label=(dayOffset?'+'+dayOffset+'d · ':'')+String(fh).padStart(2,'0')+':00';
+        html+=`<div class="forecast-slot" aria-label="${label}, ${f.condition}, ${temperature(f.tempC)}"><div class="slot-time">${label}</div><div class="slot-icon">${weatherIcon(f.code)}</div><div class="slot-temp">${temperature(f.tempC)}</div><div class="slot-rain">${f.rain}% rain</div></div>`;
+      }
+      $('forecast').innerHTML=html;
+    }
+  }
+  function updatePosition(lat,lon,fix){
+    state.lat=clamp(Math.round(lat*10)/10,20,65);state.lon=clamp(Math.round(lon*10)/10,-45,45);state.fix=fix;
+    $('aumyrLat').value=String(state.lat);$('aumyrLon').value=String(state.lon);
+    $('latText').textContent=prettyLat(state.lat);$('lonText').textContent=prettyLon(state.lon);
+    $('aumyrPosition').textContent=prettyLat(state.lat)+' · '+prettyLon(state.lon);
+    $('placeMethod').textContent=fix==='gps'?'Projected from device GPS':fix==='earth'?'Projected from Earth coordinates':'Selected on the Aumyr chart';
+    $('returnGps').disabled=!state.projected;
+    $('mapPin').style.left=((state.lon+45)/90*100)+'%';$('mapPin').style.top=((65-state.lat)/45*100)+'%';
+    clockCache.key='';render();
+  }
+  function earthToAumyr(lat,lon){return {lat:20+(lat+90)/180*45,lon:lon/4}}
+  function locationMsg(text,error){$('locationStatus').textContent=text;$('locationStatus').classList.toggle('error',!!error)}
+  function locate(){
+    if(!navigator.geolocation){locationMsg('This browser does not provide GPS. Enter Earth coordinates below.',true);$('coordinateControls').open=true;return}
+    if(!window.isSecureContext){locationMsg('For GPS, open this app from an HTTPS address in Safari. Local file previews may block GPS.',true);$('coordinateControls').open=true;return}
+    const btn=$('findMe');btn.disabled=true;btn.textContent='⌖ Locating…';locationMsg('Asking Safari for your location. Only coordinates are used.');
+    navigator.geolocation.getCurrentPosition(function(p){
+      const lat=p.coords.latitude,lon=p.coords.longitude;
+      state.earth={lat,lon};state.projected=earthToAumyr(lat,lon);btn.disabled=false;btn.textContent='◎ Refresh my location';
+      $('earthLat').value=lat.toFixed(5);$('earthLon').value=lon.toFixed(5);
+      updatePosition(state.projected.lat,state.projected.lon,'gps');
+      locationMsg('GPS ready: Earth '+lat.toFixed(4)+'°, '+lon.toFixed(4)+'°. Projection is for fun only.');
+    },function(err){btn.disabled=false;btn.textContent='◎ Try GPS again';$('coordinateControls').open=true;
+      locationMsg(err.code===1?'Location was declined. Enable Safari location permission, or enter coordinates manually.':err.code===3?'GPS timed out. Try again or enter coordinates manually.':'GPS could not determine a location. Try manual coordinates.',true);
+    },{enableHighAccuracy:false,timeout:12000,maximumAge:60000});
+  }
+  $('findMe').addEventListener('click',locate);
+  $('resetPosition').addEventListener('click',()=>{updatePosition(42.5,0,'manual');locationMsg('Centered on the Aumyr prime meridian.');});
+  $('returnGps').addEventListener('click',()=>{if(state.projected){updatePosition(state.projected.lat,state.projected.lon,'gps');locationMsg('Returned to your last GPS projection.');}});
+  $('aumyrLat').addEventListener('input',e=>updatePosition(Number(e.target.value),state.lon,'manual'));
+  $('aumyrLon').addEventListener('input',e=>updatePosition(state.lat,Number(e.target.value),'manual'));
+  $('useManualEarth').addEventListener('click',()=>{const a=$('earthLat'),b=$('earthLon');if(a.value.trim()===''||b.value.trim()===''){locationMsg('Enter both Earth coordinates.',true);return}
+    const lat=Number(a.value),lon=Number(b.value);if(!Number.isFinite(lat)||!Number.isFinite(lon)||Math.abs(lat)>90||Math.abs(lon)>180){locationMsg('Earth latitude must be −90 to 90 and longitude −180 to 180.',true);return}
+    state.earth={lat,lon};state.projected=earthToAumyr(lat,lon);updatePosition(state.projected.lat,state.projected.lon,'earth');locationMsg('Manual Earth coordinates projected onto the Aumyr chart.');
+  });
+  function mapClick(ev){const r=map.getBoundingClientRect();const x=clamp((ev.clientX-r.left)/r.width,0,1),y=clamp((ev.clientY-r.top)/r.height,0,1);updatePosition(65-45*y,-45+90*x,'manual');locationMsg('Manual Aumyr fix selected. Use “Return to my GPS projection” to go back.');}
+  map.addEventListener('click',mapClick);
+  map.addEventListener('keydown',ev=>{if(ev.key==='Enter'||ev.key===' '){ev.preventDefault();$('coordinateControls').open=true;$('aumyrLat').focus()}});
+  $('units').addEventListener('change',e=>{state.units=e.target.value;clockCache.key='';render()});
+  $('mapArt').addEventListener('load',()=>{$('mapArt').classList.add('loaded');$('mapFallback').hidden=true});
+  $('mapArt').addEventListener('error',()=>{$('mapArt').style.display='none';$('mapFallback').hidden=false});
+  if($('mapArt').complete&&$('mapArt').naturalWidth>0){$('mapArt').classList.add('loaded');$('mapFallback').hidden=true}
+  updatePosition(state.lat,state.lon,'manual');
+  setInterval(render,1000);document.addEventListener('visibilitychange',()=>{if(!document.hidden)render()});
+  // Expose calculations for reproducible, offline smoke tests only.
+  window.AumyrPocketAtlas={aumyrAt,earthToAumyr,skyFor,zoneOf,getPosition:()=>({lat:state.lat,lon:state.lon,fix:state.fix})};
+  if('serviceWorker'in navigator&&window.isSecureContext){navigator.serviceWorker.register('./sw.js').catch(()=>{})}
+})();
+</script>
+</body>
+</html>
